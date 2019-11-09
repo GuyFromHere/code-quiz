@@ -76,32 +76,27 @@ function gameOver() {
 	newNode.setAttribute('class', 'gameOver');
 	newNode.innerHTML = '<h1>Game Over</h1><h4>High Scores:</h4>';
 	board.appendChild(newNode);
+
 	// High Score table
-	newNode = document.createElement('table');
-	newNode.setAttribute('class', 'highScores');
-	board.lastChild.appendChild(newNode);
-	// th Name
-	newNode = document.createElement('th');
-	newNode.textContent = 'Name:';
-	board.lastChild.appendChild(newNode);
-	// th Score
-	newNode = document.createElement('th');
-	newNode.textContent = 'Score:';
-	board.lastChild.appendChild(newNode);
-	// Loop through scores...
-	for (var i = 0; i < scoresObj.players.length; i++) {
-		// tr
-		newNode = document.createElement('tr');
-		board.lastChild.appendChild(newNode);
-		// td
-		newNode = document.createElement('td');
-		newNode.textContent = scoresObj.players[i];
-		board.lastChild.appendChild(newNode);
-		// td
-		newNode = document.createElement('td');
-		newNode.textContent = scoresObj.playerScores[i];
-		board.lastChild.appendChild(newNode);
+	// create table element...
+	var tableNode = document.createElement('table');
+	var thInitials = document.createElement('th');
+	var thScores = document.createElement('th');
+	thInitials.innerHTML = 'Initials:';
+	thScores.innerHTML = 'Scores:';
+	tableNode.appendChild(thInitials);
+	tableNode.appendChild(thScores);
+	for (var i = 0; i < scoresObj.playerScores.length; i++) {
+		var newRow = document.createElement('tr');
+		var tdScore = document.createElement('td');
+		var tdInitials = document.createElement('td');
+		tdScore.textContent = scoresObj.playerScores[i];
+		tdInitials.textContent = scoresObj.players[i];
+		newRow.appendChild(tdScore);
+		newRow.appendChild(tdInitials);
+		tableNode.appendChild(newRow);
 	}
+	board.appendChild(tableNode);
 }
 
 // Replaces current question with the specified item from the question array
