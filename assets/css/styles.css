@@ -1,43 +1,70 @@
 * {
-  font-family: Arial, Helvetica, sans-serif;
+	font-family: Arial, Helvetica, sans-serif;
 }
 
+/*              */
+/*  index.html  */
+/*              */
 .container {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
 }
+
 .container > div:nth-of-type(1) {
-  display: flex;
-  flex-direction: row;
+	display: flex;
+	flex-direction: row;
 }
 
 #titleBar div {
-  flex-grow: 1;
-  padding: 10px;
-  margin: 0;
+	flex-grow: 1;
+	padding: 10px;
+	margin: 0;
 }
 
 #highScoreDiv {
-  text-align: left;
+	text-align: left;
 }
 
 #timerDiv {
-  text-align: right;
+	text-align: right;
 }
 
+/*                  */
+/* dynamic content  */
+/*                  */
+
+/*
 #contentArea {
-  /* display: grid; */
+	display: grid;
 }
 
 #intro {
-  flex-grow: 1;
+	flex-grow: 1;
 }
+*/
 
+/*          */
+/*  Quiz    */
+/*          */
 .question {
-  list-style: none;
+	list-style: none;
+	background: #b319eb;
+	color: #ffffff;
+	width: 30%;
+	padding: 5px;
+	margin: 2px auto;
 }
 
-#1 {
-  display: block;
+#messageArea {
+	font-style: italic;
+	font-size: large;
+}
+
+.correct {
+	color: green;
+}
+
+.incorrect {
+	color: red;
 }
