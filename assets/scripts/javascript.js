@@ -13,35 +13,7 @@
 var game = true;
 var sec = questions.length * 10;
 
-var scoresObj = {
-	players: new Array(),
-	playerScores: new Array()
-};
-
-//localStorage.setItem('scores', JSON.stringify(scores));
-
-function buildGame() {
-	// Called on body load. Creates the start page for the quiz.
-	var board = document.getElementById('gameBoard');
-	board.style.textAlign = 'center';
-
-	var newNode = document.createElement('h1');
-	newNode.textContent = 'Coding Quiz Challenge';
-	board.appendChild(newNode);
-
-	newNode = document.createElement('p');
-	newNode.textContent = 'Click the Start Quiz button to start the quiz!';
-	board.appendChild(newNode);
-
-	newNode = document.createElement('input');
-	newNode.setAttribute('type', 'button');
-	newNode.setAttribute('value', 'Start Quiz');
-	newNode.setAttribute('id', 'startButton');
-	newNode.setAttribute('onclick', 'quiz();');
-	board.appendChild(newNode);
-}
-
-function getScore(correct) {
+function getResult(correct) {
 	var messageArea = document.getElementById('messageArea');
 	if (correct) {
 		messageArea.className = 'correct';
@@ -49,54 +21,74 @@ function getScore(correct) {
 	} else {
 		messageArea.className = 'incorrect';
 		messageArea.textContent = 'Incorrect!';
-		sec -= 5;
+		sec -= 10;
 	}
+}
+
+function getScore() {
+	var board = document.getElementById('gameBoard');
+	// HIGH SCORES
+	// get highScores from localStorage
+	// if it does not exist, create as an empty array
+	var highScores = JSON.parse(localStorage.getItem('highScores') || '[]');
+	var playerName = document.getElementById('inputInitials').value;
+	// Store score info in this copy of the array
+	highScores.push({ name: playerName, score: sec });
+	// Sort the scores
+	// prettier-ignore
+	highScores.sort((a, b) => (a.score > b.score) ? -1 : 1);
+	// Put the updated array back in local storage for next time.
+	localStorage.setItem('highScores', JSON.stringify(highScores));
+
+	// High Score table
+	var tableNode = document.createElement('table');
+	var thInitials = document.createElement('th');
+	var thScores = document.createElement('th');
+	var reset = document.createElement('button');
+	thInitials.innerHTML = 'Initials:';
+	thScores.innerHTML = 'Scores:';
+	tableNode.appendChild(thInitials);
+	tableNode.appendChild(thScores);
+	for (var i = 0; i < highScores.length; i++) {
+		var newRow = document.createElement('tr');
+		var tdScore = document.createElement('td');
+		var tdInitials = document.createElement('td');
+		tdScore.textContent = highScores[i].score;
+		tdInitials.textContent = highScores[i].name;
+		newRow.appendChild(tdScore);
+		newRow.appendChild(tdInitials);
+		tableNode.appendChild(newRow);
+	}
+	board.appendChild(tableNode);
+	reset.setAttribute('id', 'buttonReset');
+	reset.innerHTML = 'Reset';
+	reset.setAttribute('onclick', 'location.reload();');
+	board.appendChild(reset);
 }
 
 function gameOver() {
 	// When game ends, display message and show button to restart the quiz (test)
 	game = false;
 	var board = document.getElementById('gameBoard');
-	// Prompt for initials
-	var playerName = prompt('Enter initials:');
-
+	// clear #gameBoard
 	while (board.firstChild) {
 		board.firstChild.remove();
 	}
-
-	// Get user score and store it in scores object
-	scoresObj.players.push(playerName);
-	scoresObj.playerScores.push(sec.toString());
-
-	console.log(scoresObj.players);
-	console.log(scoresObj.playerScores);
-
 	// Create new child nodes
 	var newNode = document.createElement('div');
 	newNode.setAttribute('class', 'gameOver');
-	newNode.innerHTML = '<h1>Game Over</h1><h4>High Scores:</h4>';
+	newNode.innerHTML = '<label>Enter initials:</label>';
 	board.appendChild(newNode);
 
-	// High Score table
-	// create table element...
-	var tableNode = document.createElement('table');
-	var thInitials = document.createElement('th');
-	var thScores = document.createElement('th');
-	thInitials.innerHTML = 'Initials:';
-	thScores.innerHTML = 'Scores:';
-	tableNode.appendChild(thInitials);
-	tableNode.appendChild(thScores);
-	for (var i = 0; i < scoresObj.playerScores.length; i++) {
-		var newRow = document.createElement('tr');
-		var tdScore = document.createElement('td');
-		var tdInitials = document.createElement('td');
-		tdScore.textContent = scoresObj.playerScores[i];
-		tdInitials.textContent = scoresObj.players[i];
-		newRow.appendChild(tdScore);
-		newRow.appendChild(tdInitials);
-		tableNode.appendChild(newRow);
-	}
-	board.appendChild(tableNode);
+	newNode = document.createElement('input');
+	newNode.setAttribute('type', 'text');
+	newNode.setAttribute('id', 'inputInitials');
+	board.appendChild(newNode);
+
+	newNode = document.createElement('button');
+	newNode.innerHTML = 'Submit';
+	newNode.setAttribute('onclick', 'getScore();');
+	board.appendChild(newNode);
 }
 
 // Replaces current question with the specified item from the question array
@@ -151,12 +143,12 @@ function nextQuestion(question, answer) {
 				questions[lastQuestion].answer ===
 				questions[lastQuestion].choices[answer]
 			) {
-				getScore(true);
+				getResult(true);
 			} else if (
 				questions[lastQuestion].answer !=
 				questions[lastQuestion].choices[answer]
 			) {
-				getScore(false);
+				getResult(false);
 			}
 		}
 	}

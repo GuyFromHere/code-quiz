@@ -5,6 +5,7 @@
 /*              */
 /*  index.html  */
 /*              */
+
 .container {
 	display: flex;
 	flex-direction: column;
@@ -28,6 +29,12 @@
 
 #timerDiv {
 	text-align: right;
+}
+
+#gameBoard {
+	text-align: center;
+	width: 50%;
+	margin: 0 auto;
 }
 
 /*                  */
@@ -67,4 +74,10 @@
 
 .incorrect {
 	color: red;
+}
+
+@media (max-width: 768px) {
+	#gameBoard {
+		width: 90%;
+	}
 }
