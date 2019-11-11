@@ -1,12 +1,3 @@
-// startQuiz starts a timer which counts down from the max time
-// max time is determined by length of quiz...questions.length * 15 seconds
-// if correct, display "Correct!" and move to next question
-// if incorrect, display "Incorrect!", move to the next question AND subtract additional 5 seconds from remaining time
-// quiz ends when timer reaches 0 or all questions are answered
-// after end of game, prompt user to enter initials for leaderboard. High scores ordered by remaining time.
-// DOM Object Style Guide:
-// https://www.w3schools.com/jsref/dom_obj_style.asp
-
 /* window.board = document.getElementById('gameBoard'); */
 
 // Keep track of whether the game is still active.
@@ -27,7 +18,6 @@ function getResult(correct) {
 
 function getScore() {
 	var board = document.getElementById('gameBoard');
-	// HIGH SCORES
 	// get highScores from localStorage
 	// if it does not exist, create as an empty array
 	var highScores = JSON.parse(localStorage.getItem('highScores') || '[]');
@@ -67,28 +57,41 @@ function getScore() {
 }
 
 function gameOver() {
-	// When game ends, display message and show button to restart the quiz (test)
+	// When game ends, display message and show button to restart the quiz
 	game = false;
 	var board = document.getElementById('gameBoard');
+	var gameOverContainer = document.createElement('div');
+	var inputInitials = document.createElement('input');
+	var scoreButton = document.createElement('button');
 	// clear #gameBoard
 	while (board.firstChild) {
 		board.firstChild.remove();
 	}
 	// Create new child nodes
-	var newNode = document.createElement('div');
+	gameOverContainer.innerHTML = '<label>Enter initials:</label>';
+
+	inputInitials.setAttribute('type', 'text');
+	inputInitials.setAttribute('id', 'inputInitials');
+	gameOverContainer.appendChild(inputInitials);
+
+	scoreButton.innerHTML = 'Submit';
+	scoreButton.setAttribute('onclick', 'getScore();');
+	gameOverContainer.appendChild(scoreButton);
+	board.appendChild(gameOverContainer);
+	/* var newNode = document.createElement('div');
 	newNode.setAttribute('class', 'gameOver');
 	newNode.innerHTML = '<label>Enter initials:</label>';
-	board.appendChild(newNode);
+	board.appendChild(newNode); */
 
-	newNode = document.createElement('input');
+	/* 	newNode = document.createElement('input');
 	newNode.setAttribute('type', 'text');
 	newNode.setAttribute('id', 'inputInitials');
-	board.appendChild(newNode);
-
+	board.appendChild(newNode); */
+	/* 
 	newNode = document.createElement('button');
 	newNode.innerHTML = 'Submit';
 	newNode.setAttribute('onclick', 'getScore();');
-	board.appendChild(newNode);
+	board.appendChild(newNode); */
 }
 
 // Replaces current question with the specified item from the question array
@@ -105,37 +108,42 @@ function nextQuestion(question, answer) {
 	if (nextQuestion > questions.length) {
 		game = false;
 	} else {
-		// Create div to hold question
-		var newNode = document.createElement('div');
-		newNode.setAttribute('id', question);
-		board.appendChild(newNode);
+		// Create question elements
+		var questionContainer = document.createElement('div');
+		var questionTitle = document.createElement('h1');
+		var questionList = document.createElement('ul');
+		var messageArea = document.createElement('div');
 
-		// Question
-		newNode = document.createElement('h1');
-		newNode.textContent = questions[question].title;
-		board.children[0].appendChild(newNode);
+		// Create div to hold question elements
+		questionContainer.setAttribute('class', 'question-container');
+		questionContainer.setAttribute('id', question);
 
-		// Answers
-		newNode = document.createElement('ul');
-		newNode.setAttribute('id', 'list_' + question);
-		board.lastChild.appendChild(newNode);
+		// Create title text
+		questionTitle.textContent = questions[question].title;
+		questionContainer.appendChild(questionTitle);
 
-		var questionList = document.getElementById('list_' + question);
+		// Create choices list
+		/* questionList.setAttribute('id', 'list_' + question); */
+		questionContainer.appendChild(questionList);
 		for (var x = 0; x < questions[question].choices.length; x++) {
-			questionList.insertAdjacentHTML(
-				'afterbegin',
-				"<li class='question' onclick='nextQuestion(" +
-					nextQuestion +
-					',' +
-					x +
-					")')>" +
-					questions[question].choices[x] +
-					'</li>'
+			var questionChoice = document.createElement('li');
+			var questionNumber = x + 1;
+			console.log(x + ' ' + questions[question].choices[x]);
+			questionChoice.setAttribute('class', 'question');
+			questionChoice.setAttribute(
+				'onclick',
+				'nextQuestion(' + nextQuestion + ',' + x + ')'
 			);
+			questionChoice.textContent =
+				questionNumber + '. ' + questions[question].choices[x];
+			questionList.appendChild(questionChoice);
 		}
-		newNode = document.createElement('div');
-		newNode.setAttribute('id', 'messageArea');
-		board.lastChild.appendChild(newNode);
+		// Create result message area
+		messageArea.setAttribute('id', 'messageArea');
+		questionContainer.appendChild(messageArea);
+
+		// Append completed container to board
+		board.appendChild(questionContainer);
 
 		// Score last question
 		if (answer > -1) {
