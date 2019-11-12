@@ -1,8 +1,7 @@
 /* window.board = document.getElementById('gameBoard'); */
-
 // Keep track of whether the game is still active.
 var game = true;
-var sec = questions.length * 10;
+var sec = questions.length * 30;
 
 function getResult(correct) {
 	var messageArea = document.getElementById('messageArea');
@@ -14,6 +13,23 @@ function getResult(correct) {
 		messageArea.textContent = 'Incorrect!';
 		sec -= 10;
 	}
+	// Working on a timeout for the result message...ideally it will fade out after two or three seconds.
+	/* var showResult = 3;
+	var time = setInterval(function() {
+		if (correct) {
+			messageArea.className = 'correct';
+			messageArea.textContent = 'Correct!';
+		} else {
+			messageArea.className = 'incorrect';
+			messageArea.textContent = 'Incorrect!';
+		}
+		if (showResult > 0) {
+			showResult--;
+		} else {
+			messageArea.textContent = '';
+			clearInterval(time);
+		}
+	}, 1000); */
 }
 
 function getScore() {
@@ -21,7 +37,7 @@ function getScore() {
 	// get highScores from localStorage
 	// if it does not exist, create as an empty array
 	var highScores = JSON.parse(localStorage.getItem('highScores') || '[]');
-	var playerName = document.getElementById('inputInitials').value;
+	var playerName = document.getElementById('initialsInput').value;
 	// Store score info in this copy of the array
 	highScores.push({ name: playerName, score: sec });
 	// Sort the scores
@@ -35,6 +51,7 @@ function getScore() {
 	var thInitials = document.createElement('th');
 	var thScores = document.createElement('th');
 	var reset = document.createElement('button');
+	tableNode.setAttribute('id', 'tableScores');
 	thInitials.innerHTML = 'Initials:';
 	thScores.innerHTML = 'Scores:';
 	tableNode.appendChild(thInitials);
@@ -61,37 +78,35 @@ function gameOver() {
 	game = false;
 	var board = document.getElementById('gameBoard');
 	var gameOverContainer = document.createElement('div');
-	var inputInitials = document.createElement('input');
-	var scoreButton = document.createElement('button');
+	var gameOverHeader = document.createElement('h3');
+	var gameOverMessage = document.createElement('p');
+	var initialsContainer = document.createElement('div');
+	var initialsInput = document.createElement('input');
+	var buttonScore = document.createElement('button');
 	// clear #gameBoard
 	while (board.firstChild) {
 		board.firstChild.remove();
 	}
 	// Create new child nodes
-	gameOverContainer.innerHTML = '<label>Enter initials:</label>';
+	gameOverContainer.setAttribute('class', 'gameOver');
+	gameOverHeader.textContent = 'All done!';
+	gameOverContainer.appendChild(gameOverHeader);
 
-	inputInitials.setAttribute('type', 'text');
-	inputInitials.setAttribute('id', 'inputInitials');
-	gameOverContainer.appendChild(inputInitials);
+	gameOverMessage.textContent = 'Your final score is ' + sec;
+	gameOverContainer.appendChild(gameOverMessage);
 
-	scoreButton.innerHTML = 'Submit';
-	scoreButton.setAttribute('onclick', 'getScore();');
-	gameOverContainer.appendChild(scoreButton);
+	initialsContainer.setAttribute('id', 'initialsContainer');
+	initialsContainer.innerHTML = '<label>Enter initials:</label>';
+	initialsInput.setAttribute('type', 'text');
+	initialsInput.setAttribute('id', 'initialsInput');
+	initialsContainer.appendChild(initialsInput);
+	gameOverContainer.appendChild(initialsContainer);
+
+	buttonScore.innerHTML = 'Submit';
+	buttonScore.setAttribute('id', 'buttonScore');
+	buttonScore.setAttribute('onclick', 'getScore();');
+	gameOverContainer.appendChild(buttonScore);
 	board.appendChild(gameOverContainer);
-	/* var newNode = document.createElement('div');
-	newNode.setAttribute('class', 'gameOver');
-	newNode.innerHTML = '<label>Enter initials:</label>';
-	board.appendChild(newNode); */
-
-	/* 	newNode = document.createElement('input');
-	newNode.setAttribute('type', 'text');
-	newNode.setAttribute('id', 'inputInitials');
-	board.appendChild(newNode); */
-	/* 
-	newNode = document.createElement('button');
-	newNode.innerHTML = 'Submit';
-	newNode.setAttribute('onclick', 'getScore();');
-	board.appendChild(newNode); */
 }
 
 // Replaces current question with the specified item from the question array
@@ -106,13 +121,13 @@ function nextQuestion(question, answer) {
 	var lastQuestion = question - 1;
 
 	if (nextQuestion > questions.length) {
+		// Reached the end of the quiz.
 		game = false;
 	} else {
 		// Create question elements
 		var questionContainer = document.createElement('div');
 		var questionTitle = document.createElement('h1');
 		var questionList = document.createElement('ul');
-		var messageArea = document.createElement('div');
 
 		// Create div to hold question elements
 		questionContainer.setAttribute('class', 'question-container');
@@ -123,12 +138,10 @@ function nextQuestion(question, answer) {
 		questionContainer.appendChild(questionTitle);
 
 		// Create choices list
-		/* questionList.setAttribute('id', 'list_' + question); */
 		questionContainer.appendChild(questionList);
 		for (var x = 0; x < questions[question].choices.length; x++) {
 			var questionChoice = document.createElement('li');
 			var questionNumber = x + 1;
-			console.log(x + ' ' + questions[question].choices[x]);
 			questionChoice.setAttribute('class', 'question');
 			questionChoice.setAttribute(
 				'onclick',
@@ -138,9 +151,6 @@ function nextQuestion(question, answer) {
 				questionNumber + '. ' + questions[question].choices[x];
 			questionList.appendChild(questionChoice);
 		}
-		// Create result message area
-		messageArea.setAttribute('id', 'messageArea');
-		questionContainer.appendChild(messageArea);
 
 		// Append completed container to board
 		board.appendChild(questionContainer);
@@ -177,8 +187,6 @@ function quiz() {
 		} else {
 			gameOver();
 			clearInterval(time);
-			/* return; */
-			/* sec = questions.length * 10; */
 		}
 	}, 1000);
 }
