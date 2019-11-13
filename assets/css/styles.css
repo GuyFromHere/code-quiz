@@ -1,106 +1,118 @@
 * {
-	font-family: Arial, Helvetica, sans-serif;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 /*              */
 /*  index.html  */
 /*              */
 .container {
-	display: flex;
-	flex-direction: column;
-	flex-wrap: wrap;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
 }
 
 .container > div:nth-of-type(1) {
-	display: flex;
-	flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
 #titleBar div {
-	flex-grow: 1;
-	padding: 10px;
-	margin: 0;
+  flex-grow: 1;
+  padding: 10px;
+  margin: 0;
 }
 
 #highScoreDiv {
-	text-align: left;
+  text-align: left;
 }
 
 #timerDiv {
-	text-align: right;
+  text-align: right;
 }
 
 #gameBoard {
-	width: 50%;
-	margin: 0 auto;
-	text-align: center;
+  width: 50%;
+  margin: 0 auto;
+  text-align: center;
 }
 
 #buttonStart,
 #buttonReset,
-#buttonScore {
-	background: #b319eb;
-	border-radius: 5px;
-	border: 0px solid #b319eb;
-	cursor: pointer;
-	color: #ffffff;
-	font-weight: bold;
-	padding: 6px 6px;
-	margin-top: 6px;
-	margin-bottom: 6px;
-	text-decoration: none;
+#buttonScore,
+#buttonClearStorage {
+  background: #b319eb;
+  border-radius: 5px;
+  border: 0px solid #b319eb;
+  cursor: pointer;
+  color: #ffffff;
+  font-weight: bold;
+  padding: 6px 6px;
+  margin-top: 6px;
+  margin-bottom: 6px;
+  text-decoration: none;
 }
 
 #messageArea {
-	width: 50%;
-	margin: 0 auto;
-	text-align: left;
-	font-style: italic;
-	font-size: large;
+  width: 90%;
+  margin: 0 auto;
+  text-align: left;
+  font-style: italic;
+  font-size: large;
+
+  opacity: 1;
+  transition: 1s opacity;
 }
 
 .correct {
-	border-top: 2px solid #959393;
-	color: green;
+  border-top: 2px solid #959393;
+  color: green;
 }
 
 .incorrect {
-	border-top: 2px solid #959393;
-	color: red;
+  border-top: 2px solid #959393;
+  color: red;
+}
+
+#fadeout {
+  opacity: 1;
+  transition: 1s opacity;
+  text-align: center;
+  font-size: 32px;
 }
 
 /*          */
 /*  Quiz    */
 /*          */
 .question-container {
-	text-align: left;
+  text-align: left;
 }
 
 .question-container ul {
-	padding-left: 0;
+  padding-left: 0;
 }
 
 .question {
-	list-style: none;
-	background: #b319eb;
-	color: #ffffff;
-	border-radius: 5px;
-	border: 0px solid #b319eb;
-	width: 30%;
-	padding: 6px 6px;
-	margin: 2px 0 2px 0;
-	cursor: pointer;
-	font-weight: bold;
-	text-decoration: none;
+  list-style: none;
+  background: #b319eb;
+  color: #ffffff;
+  border-radius: 5px;
+  border: 0px solid #b319eb;
+  width: 30%;
+  padding: 6px 6px;
+  margin: 2px 0 2px 0;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: none;
 }
 
 .question:hover {
-	background-color: #840c8a;
+  background-color: #840c8a;
 }
 
 .question:active {
-	position: relative;
-	top: 1px;
+  position: relative;
+  top: 1px;
 }
 
 /*              */
@@ -108,28 +120,31 @@
 /*              */
 
 #initialsContainer label {
-	padding: 5px;
+  padding: 5px;
+}
+
+#initialsInput {
 }
 
 #buttonScore {
-	background: #b319eb;
-	color: #ffffff;
-	border: 0px solid #b319eb;
-	border-radius: 5px;
-	padding: 6px 6px;
-	margin-top: 6px;
-	cursor: pointer;
-	font-weight: bold;
-	text-decoration: none;
+  background: #b319eb;
+  color: #ffffff;
+  border: 0px solid #b319eb;
+  border-radius: 5px;
+  padding: 6px 6px;
+  margin-top: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: none;
 }
 
 #tableScores {
-	margin: 0 auto;
+  margin: 0 auto;
 }
 
 @media (max-width: 768px) {
-	#gameBoard,
-	#messageBoard {
-		width: 90%;
-	}
+  #gameBoard,
+  #messageBoard {
+    width: 90%;
+  }
 }
