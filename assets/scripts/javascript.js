@@ -1,7 +1,7 @@
 /* window.board = document.getElementById('gameBoard'); */
 // Keep track of whether the game is still active.
 var game = true;
-var sec = questions.length * 30;
+var sec = questions.length * 15;
 
 function getResult(correct) {
   var messageArea = document.getElementById("messageArea");
