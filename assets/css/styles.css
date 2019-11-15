@@ -53,13 +53,20 @@
   text-decoration: none;
 }
 
+#buttonClearStorage {
+  margin-left: 2px;
+}
+
+#buttonReset {
+  margin-right: 2px;
+}
+
 #messageArea {
   width: 90%;
   margin: 0 auto;
   text-align: left;
   font-style: italic;
   font-size: large;
-
   opacity: 1;
   transition: 1s opacity;
 }
@@ -121,9 +128,6 @@
 
 #initialsContainer label {
   padding: 5px;
-}
-
-#initialsInput {
 }
 
 #buttonScore {
